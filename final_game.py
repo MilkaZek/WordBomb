@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import sys
 
 pygame.init()
 
@@ -12,11 +13,15 @@ display_height = 600
 black = (0,0,0)
 white = (255,255,255)
 
-word = "hello"
+red = (200,0,0)
+green = (0,200,0)
+
+bright_red = (255,0,0)
+bright_green = (0,255,0)
+
 guessed_letters = []
 max_attempts = 8
 attempts = 0
-
 
 ## create game window
 screen = pygame.display.set_mode((800, 600))
@@ -63,14 +68,42 @@ def game_intro():
         TextRect.center = ((display_width/2),(display_height/3))
         screen.blit(TextSurf, TextRect)
 
-        # button("How To Play",150,450,100,50,green,bright_green,main_game)
-        # button("Start Game",550,450,100,50,red,bright_red,quitgame)
+        # button("How To Play",150,450,100,50,green,bright_green,How_to_play)
+        button("Start Game",550,450,100,50,green,bright_green,main_game)
 
         pygame.display.update()
         clock.tick(15)
 
 def main_game():
 
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT():
+                pygame.quit()
+                sys.exit()
+        
+        screen.fill(white)
+        largeText = pygame.font.SysFont("comicsansms",50)
+        TextSurf, TextRect = text_objects("playing game", largeText)
+        TextRect.center = ((display_width/2),(display_height/3))
+        screen.blit(TextSurf, TextRect)
+
+        keys = pygame.key.get_pressed()
+
+        if event.type == pygame.KEYDOWN():
+            if keys[pygame.K_a]:
+                print('a was pressed')
+    
+        
+
+
+# def correct_guess():
+
+# def wrong_guess():
+
+# def lose():
+
+# def win():
 
 
 game_intro()
