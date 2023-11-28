@@ -19,7 +19,7 @@ bright_green = (0,255,0)
 block_color = (53,115,255)
 
 ## create game window
-screen = pygame.display.set_mode((500, 300))
+screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Bomb')
 clock = pygame.time.Clock()
 
@@ -59,18 +59,14 @@ def game_intro():
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("BOMB", largeText)
-        TextRect.center = ((display_width/2),(display_height/2))
+        TextSurf, TextRect = text_objects("Bomb", largeText)
+        TextRect.center = ((display_width/2),(display_height/3))
         screen.blit(TextSurf, TextRect)
 
-        button("GO!",150,450,100,50,green,bright_green,game_loop)
-        button("Quit",550,450,100,50,red,bright_red,quitgame)
-        # TODO (Optional): You may implement three different difficulty levels.
-        # For example, level 1 is the default start speed and incrementing by 1.
-        # Levels 2 and 3 would have a higher start speed and larger increments.
+        # button("GO!",150,450,100,50,green,bright_green,game_loop)
+        # button("Quit",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
         clock.tick(15)
 
-def game_loop()
-    ##TODO
+game_intro()
