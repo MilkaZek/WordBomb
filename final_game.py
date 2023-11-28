@@ -20,7 +20,7 @@ block_color = (53,115,255)
 
 ## create game window
 screen = pygame.display.set_mode((500, 300))
-pygame.display.set_caption('A bit Racey')
+pygame.display.set_caption('Bomb')
 clock = pygame.time.Clock()
 
 def text_objects(text, font):
@@ -59,7 +59,7 @@ def game_intro():
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("A bit Racey", largeText)
+        TextSurf, TextRect = text_objects("BOMB", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
         screen.blit(TextSurf, TextRect)
 
