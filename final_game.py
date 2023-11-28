@@ -4,19 +4,19 @@ import random
 
 pygame.init()
 
+## create variable for bomb image
+
 display_width = 800
 display_height = 600
 
 black = (0,0,0)
 white = (255,255,255)
 
-red = (200,0,0)
-green = (0,200,0)
+word = "hello"
+guessed_letters = []
+max_attempts = 8
+attempts = 0
 
-bright_red = (255,0,0)
-bright_green = (0,255,0)
-
-block_color = (53,115,255)
 
 ## create game window
 screen = pygame.display.set_mode((800, 600))
@@ -63,10 +63,14 @@ def game_intro():
         TextRect.center = ((display_width/2),(display_height/3))
         screen.blit(TextSurf, TextRect)
 
-        # button("GO!",150,450,100,50,green,bright_green,game_loop)
-        # button("Quit",550,450,100,50,red,bright_red,quitgame)
+        # button("How To Play",150,450,100,50,green,bright_green,main_game)
+        # button("Start Game",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
         clock.tick(15)
+
+def main_game():
+
+
 
 game_intro()
