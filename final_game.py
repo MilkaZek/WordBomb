@@ -19,8 +19,8 @@ bright_green = (0,255,0)
 block_color = (53,115,255)
 
 ## create game window
-screen = pygame.display.set_mode((500, 300))
-pygame.display.set_caption('A bit Racey')
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption('Bomb')
 clock = pygame.time.Clock()
 
 def text_objects(text, font):
@@ -59,18 +59,46 @@ def game_intro():
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("A bit Racey", largeText)
-        TextRect.center = ((display_width/2),(display_height/2))
+        TextSurf, TextRect = text_objects("Bomb", largeText)
+        TextRect.center = ((display_width/2),(display_height/3))
         screen.blit(TextSurf, TextRect)
 
-        button("GO!",150,450,100,50,green,bright_green,game_loop)
-        button("Quit",550,450,100,50,red,bright_red,quitgame)
-        # TODO (Optional): You may implement three different difficulty levels.
-        # For example, level 1 is the default start speed and incrementing by 1.
-        # Levels 2 and 3 would have a higher start speed and larger increments.
+        button("How To Play",150,450,100,50,green,bright_green,how_to_play_screen)
+        # button("Start Game",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
         clock.tick(15)
 
-def game_loop()
-    ##TODO
+def how_to_play_screen():
+    while True:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        screen.fill(white)
+        largeText = pygame.font.SysFont("comicsansms",115)
+        TextSurf, TextRect = text_objects("How To Play", largeText)
+        TextRect.center = ((display_width/2),(display_height/5))
+        screen.blit(TextSurf, TextRect)
+
+        smallText = pygame.font.SysFont("comicsansms",20)
+        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText)
+        textRect.center = ((display_width/2),(display_height/3))
+        screen.blit(textSurf, textRect)
+
+        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText)
+        ttextRect.center = ((display_width/2),(display_height/2))
+        screen.blit(ttextSurf, ttextRect)
+        print("HI")
+        textSSurf, textRRect = text_objects("and the bomb EXPLODES", smallText)
+        textRRect.center = ((display_width/2),(display_height/1.5))
+        screen.blit(textSSurf, textRRect)
+
+        button("Back To Home",150,450,100,50,green,bright_green,game_intro)
+
+        pygame.display.update()
+        clock.tick(15)
+
+game_intro()
