@@ -10,6 +10,7 @@ display_height = 600
 black = (0,0,0)
 white = (246,246,246)
 
+
 red = (200,0,0)
 green = (0,200,0)
 
@@ -35,7 +36,6 @@ def text_objects(text, font, color):
 def quitgame():
     pygame.quit()
     quit()
-
 
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
