@@ -19,10 +19,6 @@ green = (0,200,0)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 
-guessed_letters = []
-max_attempts = 8
-attempts = 0
-
 ## create game window
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Bomb')
@@ -74,25 +70,42 @@ def game_intro():
         pygame.display.update()
         clock.tick(15)
 
-def main_game():
+class Game:
+    def __init__(self, wordlist):
+        self.wordlist = random.choice(wordlist)
+        self.guesses = []
+        self.max_attempts = 8
+        self.attempts = 0
 
-    while True:
+    def word_on_screen(self):
+        display = ""
+        for letter in self.word:
+            if letter in self.guesses:
+                display += letter + " "
+        return display
+
+    def mainscreen(self):
+        screen.fill(white)
+        # write word_on_screen
+        # write guessed letters
+        # use bomb
+        
+
+def main_game():
+    words = ["word", "this", "that"]
+    play = Game(words)
+    
+    running = True
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT():
                 pygame.quit()
                 sys.exit()
+
+        play.mainscreen()
+
+        # move these into a function into a class maybe
         
-        screen.fill(white)
-        largeText = pygame.font.SysFont("comicsansms",50)
-        TextSurf, TextRect = text_objects("playing game", largeText)
-        TextRect.center = ((display_width/2),(display_height/3))
-        screen.blit(TextSurf, TextRect)
-
-        keys = pygame.key.get_pressed()
-
-        if event.type == pygame.KEYDOWN():
-            if keys[pygame.K_a]:
-                print('a was pressed')
     
         
 
