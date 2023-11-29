@@ -8,23 +8,29 @@ display_width = 800
 display_height = 600
 
 black = (0,0,0)
-white = (255,255,255)
+white = (246,246,246)
 
 red = (200,0,0)
 green = (0,200,0)
 
 bright_red = (255,0,0)
 bright_green = (0,255,0)
+dark_red = (77, 0, 0)
+blue = (0, 172, 230)
+bright_blue = (26, 198, 255)
 
 block_color = (53,115,255)
+
+screen_background = pygame.image.load('bomb-blast-clipart-7.jpg')
 
 ## create game window
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Bomb')
 clock = pygame.time.Clock()
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, black)
+
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 def quitgame():
@@ -42,12 +48,14 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     else:
         pygame.draw.rect(screen, ic,(x,y,w,h))
     smallText = pygame.font.SysFont("comicsansms",20)
-    textSurf, textRect = text_objects(msg, smallText)
+    textSurf, textRect = text_objects(msg, smallText, black)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
 
-def game_intro():
 
+def game_intro():
+    pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
+    pygame.mixer.music.play(-1)
     intro = True
 
     while intro:
@@ -58,13 +66,15 @@ def game_intro():
                 quit()
 
         screen.fill(white)
+        screen.blit(screen_background, (65, -20))
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("Bomb", largeText)
-        TextRect.center = ((display_width/2),(display_height/3))
+        
+        TextSurf, TextRect = text_objects("Wordbomb!", largeText, dark_red)
+        TextRect.center = ((display_width/2),(260))
         screen.blit(TextSurf, TextRect)
-
-        button("How To Play",150,450,100,50,green,bright_green,how_to_play_screen)
-        # button("Start Game",550,450,100,50,red,bright_red,quitgame)
+        button("Start!",150,450,100,50,green,bright_green,game_loop)
+        button("How to Play",338,450,124,50,blue,bright_blue,how_to_play_screen)
+        button("Quit",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
         clock.tick(15)
@@ -79,20 +89,20 @@ def how_to_play_screen():
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("How To Play", largeText)
+        TextSurf, TextRect = text_objects("How To Play", largeText, dark_red)
         TextRect.center = ((display_width/2),(display_height/5))
         screen.blit(TextSurf, TextRect)
 
         smallText = pygame.font.SysFont("comicsansms",20)
-        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText)
+        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText, black)
         textRect.center = ((display_width/2),(display_height/3))
         screen.blit(textSurf, textRect)
 
-        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText)
+        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText, black)
         ttextRect.center = ((display_width/2),(display_height/2))
         screen.blit(ttextSurf, ttextRect)
-        print("HI")
-        textSSurf, textRRect = text_objects("and the bomb EXPLODES", smallText)
+        
+        textSSurf, textRRect = text_objects("or the bomb EXPLODES", smallText, bright_red)
         textRRect.center = ((display_width/2),(display_height/1.5))
         screen.blit(textSSurf, textRRect)
 
@@ -101,4 +111,9 @@ def how_to_play_screen():
         pygame.display.update()
         clock.tick(15)
 
+    
+def game_loop():
+    pass
+
 game_intro()
+
