@@ -103,7 +103,7 @@ class Game:
         # get keyboard inputs and compare with word
         key = pygame.key.get_pressed()
         
-
+    # this is main game
     def mainscreen(self):
         screen.fill(white)
         # write word_on_screen
