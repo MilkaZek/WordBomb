@@ -75,7 +75,7 @@ def game_intro():
         TextRect.center = ((display_width/2),(260))
         screen.blit(TextSurf, TextRect)
         button("Start!",150,450,100,50,green,bright_green,game_loop)
-        button("How to Play",338,450,124,50,blue,bright_blue,how_to_play)
+        button("How to Play",338,450,124,50,blue,bright_blue,how_to_play_screen)
         button("Quit",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
@@ -115,8 +115,37 @@ class Bomb:
         self.fuse = fuse
         length_of_fuse = 8
         
-def how_to_play():
-    pass
+def how_to_play_screen():
+    while True:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        screen.fill(white)
+        largeText = pygame.font.SysFont("comicsansms",115)
+        TextSurf, TextRect = text_objects("How To Play", largeText, dark_red)
+        TextRect.center = ((display_width/2),(display_height/5))
+        screen.blit(TextSurf, TextRect)
+
+        smallText = pygame.font.SysFont("comicsansms",20)
+        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText, black)
+        textRect.center = ((display_width/2),(display_height/3))
+        screen.blit(textSurf, textRect)
+
+        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText, black)
+        ttextRect.center = ((display_width/2),(display_height/2))
+        screen.blit(ttextSurf, ttextRect)
+        
+        textSSurf, textRRect = text_objects("or the bomb EXPLODES", smallText, bright_red)
+        textRRect.center = ((display_width/2),(display_height/1.5))
+        screen.blit(textSSurf, textRRect)
+
+        button("Back To Home",150,450,100,50,green,bright_green,game_intro)
+
+        pygame.display.update()
+        clock.tick(15)
 
 def main_game():
     words = ["word", "this", "that"]
