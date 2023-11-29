@@ -70,6 +70,7 @@ def game_intro():
         screen.fill(white)
         screen.blit(screen_background, (65, -20))
         largeText = pygame.font.SysFont("comicsansms",115)
+        
         TextSurf, TextRect = text_objects("Wordbomb!", largeText, dark_red)
         TextRect.center = ((display_width/2),(260))
         screen.blit(TextSurf, TextRect)
@@ -79,8 +80,9 @@ def game_intro():
 
         pygame.display.update()
         clock.tick(15)
-
+    
 def game_loop():
     pass
 
 game_intro()
+
