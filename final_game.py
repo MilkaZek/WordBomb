@@ -10,7 +10,6 @@ display_height = 600
 black = (0,0,0)
 white = (246,246,246)
 
-
 red = (200,0,0)
 green = (0,200,0)
 
@@ -51,9 +50,6 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textSurf, textRect = text_objects(msg, smallText, black)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
-
-def how_to_play():
-    pass
 
 def game_intro():
     pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
