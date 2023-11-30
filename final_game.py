@@ -37,7 +37,6 @@ def quitgame():
     pygame.quit()
     quit()
 
-
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -52,9 +51,6 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textSurf, textRect = text_objects(msg, smallText, black)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
-
-def how_to_play():
-    pass
 
 def game_intro():
     pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
@@ -76,7 +72,7 @@ def game_intro():
         TextRect.center = ((display_width/2),(260))
         screen.blit(TextSurf, TextRect)
         button("Start!",150,450,100,50,green,bright_green,game_loop)
-        button("How to Play",338,450,124,50,blue,bright_blue,how_to_play)
+        button("How to Play",338,450,124,50,blue,bright_blue,how_to_play_screen)
         button("Quit",550,450,100,50,red,bright_red,quitgame)
 
         pygame.display.update()
@@ -84,6 +80,91 @@ def game_intro():
     
 def game_loop():
     pass
+
+class Game:
+    def __init__(self, wordlist):
+        self.wordlist = random.choice(wordlist)
+        self.guesses = []
+        self.max_attempts = 8
+        self.attempts = 0
+
+    def word_on_screen(self):
+        display = ""
+        for letter in self.word:
+            if letter in self.guesses:
+                display += letter + " "
+        return display
+    
+    def keys(self):
+        pass
+        # get keyboard inputs and compare with word
+        key = pygame.key.get_pressed()
+        
+    # this is main game
+    def mainscreen(self):
+        screen.fill(white)
+        # write word_on_screen
+        # write guessed letters
+        # use bomb
+
+class Bomb:
+    def __init__(self, fuse):
+        self.fuse = fuse
+        length_of_fuse = 8
+        
+def how_to_play_screen():
+    while True:
+        for event in pygame.event.get():
+            #print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        screen.fill(white)
+        largeText = pygame.font.SysFont("comicsansms",115)
+        TextSurf, TextRect = text_objects("How To Play", largeText, dark_red)
+        TextRect.center = ((display_width/2),(display_height/5))
+        screen.blit(TextSurf, TextRect)
+
+        smallText = pygame.font.SysFont("comicsansms",20)
+        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText, black)
+        textRect.center = ((display_width/2),(display_height/3))
+        screen.blit(textSurf, textRect)
+
+        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText, black)
+        ttextRect.center = ((display_width/2),(display_height/2))
+        screen.blit(ttextSurf, ttextRect)
+        
+        textSSurf, textRRect = text_objects("or the bomb EXPLODES", smallText, bright_red)
+        textRRect.center = ((display_width/2),(display_height/1.5))
+        screen.blit(textSSurf, textRRect)
+
+        button("Back To Home",150,450,100,50,green,bright_green,game_intro)
+
+        pygame.display.update()
+        clock.tick(15)
+
+def main_game():
+    words = ["word", "this", "that"]
+    play = Game(words)
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT():
+                pygame.quit()
+                quit()
+
+        play.mainscreen()
+
+
+# def correct_guess():
+
+# def wrong_guess():
+
+# def lose():
+
+# def win():
 
 game_intro()
 
