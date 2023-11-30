@@ -24,6 +24,11 @@ block_color = (53,115,255)
 
 screen_background = pygame.image.load('bomb-blast-clipart-7.jpg')
 
+response = requests.get("https://random-word-api.herokuapp.com/word?length=5")
+data = response.json()
+word = data[0]
+print(word)
+
 ## create game window
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Bomb')
@@ -122,7 +127,7 @@ def how_to_play_screen():
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("How To Play", largeText, dark_red)
+        TextSurf, TextRect = text_objects("How To Play", largeText, black)
         TextRect.center = ((display_width/2),(display_height/5))
         screen.blit(TextSurf, TextRect)
 
@@ -139,7 +144,7 @@ def how_to_play_screen():
         textRRect.center = ((display_width/2),(display_height/1.5))
         screen.blit(textSSurf, textRRect)
 
-        button("Back To Home",150,450,100,50,green,bright_green,game_intro)
+        button("Back To Home",150,450,150,50,green,bright_green,game_intro)
 
         pygame.display.update()
         clock.tick(15)
