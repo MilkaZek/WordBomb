@@ -94,7 +94,7 @@ def how_to_play_screen():
         screen.blit(TextSurf, TextRect)
 
         smallText = pygame.font.SysFont("comicsansms",20)
-        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText, black)
+        textSurf, textRect = text_objects("You have 5 lives per word", smallText, black)
         textRect.center = ((display_width/2),(display_height/3))
         screen.blit(textSurf, textRect)
 
