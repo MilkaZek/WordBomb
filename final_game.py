@@ -1,3 +1,15 @@
+"""
+Authors: Cara Babin, Paige Inoue, Milka Zekarias
+Updated as of: 11/30/2023
+Description: A hangman inspired word-guessing game where you have five lives to complete a word before a ticking time bomb goes off!
+References: Word API sourced from "https://random-word-api.herokuapp.com/"
+Screens and game loop framework sourced from racey.py (Lab 15)
+Explosion sound sourced from Pixabay
+Cheering sound sourced from Gamerboy on Youtube
+Background music sourced from Jonny Boyle on Uppbeat.io
+Other images and backgrounds sourced online
+"""
+
 import pygame
 import time
 import random
