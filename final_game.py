@@ -273,4 +273,13 @@ def win(game):
         pygame.display.update()
         clock.tick(15)
 
+<<<<<<< HEAD
 game_intro()
+=======
+# def lose():
+
+# def win():
+
+game_intro()
+
+>>>>>>> 4a63c61d7f09a7355103295f66279562b7fc169b
