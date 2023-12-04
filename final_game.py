@@ -1,6 +1,19 @@
+"""
+Authors: Cara Babin, Paige Inoue, Milka Zekarias
+Updated as of: 11/30/2023
+Description: A hangman inspired word-guessing game where you have five lives to complete a word before a ticking time bomb goes off!
+References: Word API sourced from "https://random-word-api.herokuapp.com/"
+Screens and game loop framework sourced from racey.py (Lab 15)
+Explosion sound sourced from Pixabay
+Cheering sound sourced from Gamerboy on Youtube
+Background music sourced from Jonny Boyle on Uppbeat.io
+Other images and backgrounds sourced online
+"""
+
 import pygame
 import time
 import random
+import requests
 
 pygame.init()
 
@@ -12,6 +25,7 @@ white = (246,246,246)
 
 red = (200,0,0)
 green = (0,200,0)
+highlighter_yellow = (255, 255, 0)
 
 bright_red = (255,0,0)
 bright_green = (0,255,0)
@@ -22,10 +36,11 @@ bright_blue = (26, 198, 255)
 block_color = (53,115,255)
 
 screen_background = pygame.image.load('bomb-blast-clipart-7.jpg')
+screen_exploded = pygame.image.load('boom.jpg')
 
 ## create game window
 screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption('Bomb')
+pygame.display.set_caption('Wordbomb')
 clock = pygame.time.Clock()
 
 def text_objects(text, font, color):
@@ -52,19 +67,19 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     screen.blit(textSurf, textRect)
 
 def game_intro():
-    pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
-    pygame.mixer.music.play(-1)
+    if not pygame.mixer.music.get_busy():
+        pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
+        pygame.mixer.music.play(-1)
     intro = True
 
     while intro:
         for event in pygame.event.get():
-            #print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
         screen.fill(white)
-        screen.blit(screen_background, (65, -20))
+        screen.blit(pygame.transform.scale(screen_background, (800, 600)), (0, 0))
         largeText = pygame.font.SysFont("comicsansms",115)
         
         TextSurf, TextRect = text_objects("Wordbomb!", largeText, dark_red)
@@ -78,55 +93,121 @@ def game_intro():
         clock.tick(15)
     
 def game_loop():
-    pass
+    playing = True
+    play = Game()
+    if not pygame.mixer.music.get_busy():
+        pygame.mixer.music.load('easy-does-it-jonny-boyle-main-version-02-28-20.mp3')
+        pygame.mixer.music.play(-1)
+    
+    while playing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                key = pygame.key.name(event.key)
+                play.compare_guess(key)
+        play.mainscreen()
+        pygame.display.update()
+        clock.tick(60)
+        if play.lives == 0:
+            lose(play.word)
+        if "_" not in play.display:
+            win(play)
+
+
+
+
 
 class Game:
-    def __init__(self, wordlist):
-        self.wordlist = random.choice(wordlist)
+    def __init__(self):
+        response = requests.get("https://random-word-api.herokuapp.com/word?length=5")
+        data = response.json()
+        self.word = data[0]
+        self.display = ["_", "_", "_", "_", "_"]
         self.guesses = []
-        self.max_attempts = 8
-        self.attempts = 0
+        self.lives = 5
+        self.bomb = Bomb()
+        self.wordbank = ""
 
     def word_on_screen(self):
-        display = ""
-        for letter in self.word:
-            if letter in self.guesses:
-                display += letter + " "
-        return display
+            TextSurf, TextRect = text_objects(self.display[0], pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((300),(260))
+            screen.blit(TextSurf, TextRect)
+
+            TextSurf, TextRect = text_objects(self.display[1], pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((400),(260))
+            screen.blit(TextSurf, TextRect)
+
+            TextSurf, TextRect = text_objects(self.display[2], pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((500),(260))
+            screen.blit(TextSurf, TextRect)
+
+            TextSurf, TextRect = text_objects(self.display[3], pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((600),(260))
+            screen.blit(TextSurf, TextRect)
+
+            TextSurf, TextRect = text_objects(self.display[4], pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((700),(260))
+            screen.blit(TextSurf, TextRect)
+
+            TextSurf, TextRect = text_objects(self.wordbank, pygame.font.SysFont("comicsansms",75), black)
+            TextRect.center = ((150),(500))
+            screen.blit(TextSurf, TextRect)
     
-    def keys(self):
-        pass
+    
+    def compare_guess(self, guess):
         # get keyboard inputs and compare with word
-        key = pygame.key.get_pressed()
+        correct = False
+        if guess in self.guesses:
+            return
+        else:
+            self.guesses.append(guess)
+        for i in range(len(self.word)):
+            if guess == self.word[i]:
+                self.display[i] = guess
+                correct = True
+        if not correct:
+            self.bomb.burn()
+            self.lives -= 1
+            self.wordbank += f'{guess} '
+                
         
     # this is main game
     def mainscreen(self):
         screen.fill(white)
-        # write word_on_screen
-        # write guessed letters
-        # use bomb
+        self.word_on_screen()
+        self.bomb.update_bomb()
 
 class Bomb:
-    def __init__(self, fuse):
-        self.fuse = fuse
-        length_of_fuse = 8
+    def __init__(self):
+        self.fuse = ["", "B", "BO", "BOM", "BOMB", "BOMBS"]
+        self.length_of_fuse = 5
+
+    def update_bomb(self):
+        textSurf, textRect = text_objects(self.fuse[self.length_of_fuse], pygame.font.SysFont("comicsansms",75), black)
+        textRect.center = ((150),(260))
+        screen.blit(textSurf, textRect)
+
+    def burn(self):
+        self.length_of_fuse -= 1
+
         
 def how_to_play_screen():
     while True:
         for event in pygame.event.get():
-            #print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
         screen.fill(white)
         largeText = pygame.font.SysFont("comicsansms",115)
-        TextSurf, TextRect = text_objects("How To Play", largeText, dark_red)
+        TextSurf, TextRect = text_objects("How To Play", largeText, black)
         TextRect.center = ((display_width/2),(display_height/5))
         screen.blit(TextSurf, TextRect)
 
         smallText = pygame.font.SysFont("comicsansms",20)
-        textSurf, textRect = text_objects("You have 3 letter guesses per word", smallText, black)
+        textSurf, textRect = text_objects("You have 5 lives per word", smallText, black)
         textRect.center = ((display_width/2),(display_height/3))
         screen.blit(textSurf, textRect)
 
@@ -138,32 +219,59 @@ def how_to_play_screen():
         textRRect.center = ((display_width/2),(display_height/1.5))
         screen.blit(textSSurf, textRRect)
 
-        button("Back To Home",150,450,100,50,green,bright_green,game_intro)
+        button("Back To Home",150,500,150,50,green,bright_green,game_intro)
 
         pygame.display.update()
         clock.tick(15)
 
-def main_game():
-    words = ["word", "this", "that"]
-    play = Game(words)
-    
-    running = True
-    while running:
+def lose(word):
+    pygame.mixer.music.load('explosion-42132.mp3')
+    pygame.mixer.music.play(1)
+
+    while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT():
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
-        play.mainscreen()
+        screen.fill(white)
+        screen.blit(pygame.transform.scale(screen_exploded, (800, 600)), (0, 0))
+        largeText = pygame.font.SysFont("comicsansms", 75)
+        
+        TextSurf, TextRect = text_objects("YOU EXPLODED!!!", largeText, highlighter_yellow)
+        TextRect.center = ((display_width/2),(175))
+        screen.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects("OH NO......", largeText, highlighter_yellow)
+        TextRect.center = ((display_width/2),(300))
+        screen.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects(f'The correct word was: {word}', pygame.font.SysFont("comicsansms", 20), highlighter_yellow)
+        TextRect.center = ((display_width/2),(380))
+        screen.blit(TextSurf, TextRect)
+        button("Try Again",150,450,100,50,green,bright_green,game_loop)
+        button("Quit",550,450,100,50,red,bright_red,quitgame)
+
+        pygame.display.update()
+        clock.tick(15)
 
 
-# def correct_guess():
+def win(game):
+    pygame.mixer.music.load('yay!!!.mp3')
+    pygame.mixer.music.play(1)
 
-# def wrong_guess():
-
-# def lose():
-
-# def win():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        screen.fill(white)
+        textSurf, textRect = text_objects(":D", pygame.font.SysFont("comicsansms",75), black)
+        textRect.center = ((150),(260))
+        screen.blit(textSurf, textRect)
+        game.word_on_screen()
+        button("Play Again!",150,400,100,50,green,bright_green,game_loop)
+        button("Quit",550,400,100,50,red,bright_red,quitgame)
+        pygame.display.update()
+        clock.tick(15)
 
 game_intro()
 
