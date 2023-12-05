@@ -38,6 +38,13 @@ block_color = (53,115,255)
 screen_background = pygame.image.load('bomb-blast-clipart-7.jpg')
 screen_exploded = pygame.image.load('boom.jpg')
 
+bomb_5 = pygame.transform.scale(pygame.image.load('bomb_5.png'), (400, 400))
+bomb_4 = pygame.transform.scale(pygame.image.load('bomb_4.png'), (400, 400))
+bomb_3 = pygame.transform.scale(pygame.image.load('bomb_3.png'), (400, 400))
+bomb_2 = pygame.transform.scale(pygame.image.load('bomb_2.png'), (400, 400))
+bomb_1 = pygame.transform.scale(pygame.image.load('bomb_1.png'), (400, 400))
+bomb_defuse = pygame.transform.scale(pygame.image.load('bomb_defuse.png'), (400, 400))
+
 ## create game window
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Wordbomb')
@@ -108,7 +115,6 @@ def game_loop():
                 key = pygame.key.name(event.key)
                 play.compare_guess(key)
         play.mainscreen()
-        pygame.display.update()
         clock.tick(60)
         if play.lives == 0:
             lose(play.word)
@@ -124,11 +130,15 @@ class Game:
         response = requests.get("https://random-word-api.herokuapp.com/word?length=5")
         data = response.json()
         self.word = data[0]
+        # self.word = "arbor"
         self.display = ["_", "_", "_", "_", "_"]
         self.guesses = []
         self.lives = 5
         self.bomb = Bomb()
         self.wordbank = ""
+        self.result = ""
+        self.popup = ""
+        self.custom_message = "lives"
 
     def word_on_screen(self):
             TextSurf, TextRect = text_objects(self.display[0], pygame.font.SysFont("comicsansms",75), black)
@@ -156,6 +166,15 @@ class Game:
             screen.blit(TextSurf, TextRect)
     
     
+    def update_message(self):
+        TextSurf, TextRect = text_objects(self.result, pygame.font.SysFont("comicsansms", 25), black)
+        TextRect.center = ((3 * display_width/4),(500))
+        screen.blit(TextSurf, TextRect)
+       
+        TextSurf, TextRect = text_objects(self.popup, pygame.font.SysFont("comicsansms", 25), black)
+        TextRect.center = ((3 * display_width/4),(540))
+        screen.blit(TextSurf, TextRect)
+
     def compare_guess(self, guess):
         # get keyboard inputs and compare with word
         correct = False
@@ -166,11 +185,17 @@ class Game:
         for i in range(len(self.word)):
             if guess == self.word[i]:
                 self.display[i] = guess
+                self.result = "Correct!"
                 correct = True
+                
         if not correct:
             self.bomb.burn()
             self.lives -= 1
+            self.result = "Wrong!"
+            if self.lives == 1:
+                self.custom_message = "life"
             self.wordbank += f'{guess} '
+        self.popup = f'You have {self.lives} {self.custom_message} left'
                 
         
     # this is main game
@@ -178,16 +203,17 @@ class Game:
         screen.fill(white)
         self.word_on_screen()
         self.bomb.update_bomb()
+        self.update_message()
+        pygame.display.update()
 
 class Bomb:
     def __init__(self):
-        self.fuse = ["", "B", "BO", "BOM", "BOMB", "BOMBS"]
-        self.length_of_fuse = 5
+        self.fuse = [bomb_1, bomb_2, bomb_3, bomb_4, bomb_5]
+        self.length_of_fuse = 4
 
     def update_bomb(self):
-        textSurf, textRect = text_objects(self.fuse[self.length_of_fuse], pygame.font.SysFont("comicsansms",75), black)
-        textRect.center = ((150),(260))
-        screen.blit(textSurf, textRect)
+        bomb_phase = self.fuse[self.length_of_fuse]
+        screen.blit(bomb_phase, (10, 25))
 
     def burn(self):
         self.length_of_fuse -= 1
@@ -211,7 +237,7 @@ def how_to_play_screen():
         textRect.center = ((display_width/2),(display_height/3))
         screen.blit(textSurf, textRect)
 
-        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns", smallText, black)
+        ttextSurf, ttextRect = text_objects("Guess the word before the fuse burns completely", smallText, black)
         ttextRect.center = ((display_width/2),(display_height/2))
         screen.blit(ttextSurf, ttextRect)
         
@@ -263,11 +289,7 @@ def win(game):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        screen.fill(white)
-        textSurf, textRect = text_objects(":D", pygame.font.SysFont("comicsansms",75), black)
-        textRect.center = ((150),(260))
-        screen.blit(textSurf, textRect)
-        game.word_on_screen()
+        screen.blit(bomb_defuse, (10, 25))
         button("Play Again!",150,400,100,50,green,bright_green,game_loop)
         button("Quit",550,400,100,50,red,bright_red,quitgame)
         pygame.display.update()
