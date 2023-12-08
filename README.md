@@ -1,6 +1,6 @@
 # Wordbomb
-# Team Name: MPC
-# Team Members: Milka, Paige, & Cara
+### Team Name: MPC
+### Team Members: Milka, Paige, & Cara
 
 ## About Wordbomb
 - The Idea, the Vision: Hangman, but with a BOMB! We wanted to put a new spin on a fan-favorite game to dispel boredom and increase our vocabulary.
