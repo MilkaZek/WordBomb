@@ -16,8 +16,8 @@
 - Download the pygame library using `pip install pygame`
 - Download the requests library using `pip install requests`
 - *Note*: Depending on which version of python you are running or what type of device you are on, these commands may differ
-- Download the repository and run from your terminal through this link![code link]
-[code link]:https://github.com/LMU-CMSI-1010/project-mpc.git
+- Download the repository and run from your terminal through this link![codelink]
+[codelink]:https://github.com/LMU-CMSI-1010/project-mpc.git
 
 ## Acknowledgements
 - Pygame and Requests libraries installed and used throughout the game
