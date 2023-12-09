@@ -21,7 +21,6 @@
 
 ## Acknowledgements
 - Pygame and Requests libraries installed and used throughout the game
-- Racey.py Lab 14 from our CMSI 1010 course referenced for the framework of the various screens, the game intro loop, and the main game loop
 - Word API sourced from "https://random-word-api.herokuapp.com/"
 - Screens and game loop framework sourced from racey.py (Lab 15)
 - Explosion sound sourced from Pixabay
