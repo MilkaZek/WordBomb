@@ -18,6 +18,8 @@
 - *Note*: Depending on which version of python you are running or what type of device you are on, these commands may differ
 - Download the repository and run from your terminal through this link!:
   https://github.com/LMU-CMSI-1010/project-mpc.git
+- Call up your version of Python and run the final_game.py file! For example: `python3 final_game.py`
+  - Have fun and good luck!
 
 ## Acknowledgements
 - Pygame and Requests libraries installed and used throughout the game
